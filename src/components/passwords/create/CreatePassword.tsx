@@ -14,10 +14,16 @@ function CreatePassword({ GoBack }: Props) {
       onSubmit={(e) => {
         e.preventDefault();
 
+        const target = e.target as typeof e.target & {
+          name: { value: string };
+          password: { value: string };
+          team: { value: string };
+        };
+
         const data = {
-          name: e.target?.name?.value,
-          password: e.target?.password?.value,
-          team: e.target?.team?.value,
+          name: target.name.value,
+          password: target.password.value,
+          team: target.team.value,
         };
 
         addPassword(data);

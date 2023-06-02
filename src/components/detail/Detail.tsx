@@ -8,9 +8,8 @@ import { getPassword } from "@/lib/lib";
 type Props = {};
 
 export default function Detail({}: Props) {
-  const { data, updatePassword, setSelectedPassword } = useContext(
-    Context
-  ) as IContext;
+  const { data, updatePassword, setSelectedPassword, deletePassword } =
+    useContext(Context) as IContext;
 
   const [show, setShow] = useState<boolean>(false);
 
@@ -28,7 +27,12 @@ export default function Detail({}: Props) {
   return (
     <div className="flex w-96 flex-col gap-6 border p-6">
       <div className="flex flex-row justify-between">
-        <h2>{selectedPassword.name}</h2>
+        <h2>
+          {selectedPassword.name}{" "}
+          <span className=" text-slate-500 text-xs">
+            id: {selectedPassword.id}
+          </span>
+        </h2>
         <button
           onClick={() => setSelectedPassword(null)}
           className=" text-red-400"
@@ -78,6 +82,20 @@ export default function Detail({}: Props) {
               </option>
             ))}
           </select>
+        </div>
+      </div>
+      <div className="flex flex-col gap-1">
+        <h3 className="text-sm">Delete</h3>
+        <div className="flex flex-row gap-3">
+          <button
+            className=" text-red"
+            onClick={() =>
+              window.confirm("are you sure you want to delete this password") &&
+              deletePassword(selectedPassword.id)
+            }
+          >
+            delete
+          </button>
         </div>
       </div>
     </div>

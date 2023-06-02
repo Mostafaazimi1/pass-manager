@@ -5,7 +5,12 @@ import { IPassword } from "@/types/types";
 export const getPasswords = (): IPassword[] => {
   let passwords = localStorage.getItem("passwords");
 
-  if (passwords !== null) return JSON.parse(passwords) as IPassword[];
+  if (passwords === null) return [];
 
-  return [{ id: 1, name: "test", team: "Payroll Select", password: "123" }];
+  return JSON.parse(passwords) as IPassword[];
+};
+
+export const savePasswords = (passwords: IPassword[]): void => {
+  const data = JSON.stringify(passwords);
+  localStorage.setItem("passwords", data);
 };

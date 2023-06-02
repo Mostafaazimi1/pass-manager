@@ -45,7 +45,7 @@ export const getPassword = (
 export const createUUID = (passwords: IPassword[]): number => {
   const usedIDs = passwords.map((i) => i.id);
 
-  let random = Math.max(...usedIDs);
+  let random = 0;
 
   while (usedIDs.includes(random)) random += 1;
 

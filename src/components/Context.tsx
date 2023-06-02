@@ -1,7 +1,7 @@
 "use client";
 
 import { getTeams, createUUID } from "@/lib/lib";
-import { getPasswords } from "../lib/lib-client";
+import { getPasswords, savePasswords } from "../lib/lib-client";
 import { IPassword, ITeam } from "@/types/types";
 import React, { createContext, useEffect, useMemo, useState } from "react";
 
@@ -19,17 +19,18 @@ interface IData {
   passwords: IPassword[];
   teams: ITeam[];
   search: string;
+  initialized: boolean;
 }
 
 export interface IContext {
   data: IData;
   setSelectedTeam: (teamName: string | null) => void;
   setSelectedPassword: (password: number | null) => void;
-
   updatePassword: (password: IPassword) => void;
   showPasswords: IPassword[];
   setSearch: (str: string) => void;
   addPassword: (data: { name: string; password: string; team: string }) => void;
+  deletePassword: (id: number) => void;
 }
 
 export const Context = createContext({});
@@ -41,30 +42,39 @@ export function ContextProvider(props: Props) {
     search: "",
     teams: [],
     passwords: [],
+    initialized: false,
   });
 
   useEffect(() => {
     setData((prev) => {
-      return { ...prev, teams: getTeams(), passwords: getPasswords() };
+      return {
+        ...prev,
+        teams: getTeams(),
+        passwords: getPasswords(),
+        initialized: true,
+      };
     });
   }, []);
+
+  useEffect(() => {
+    if (!data.initialized) return;
+    savePasswords(data.passwords);
+  }, [data.passwords, data.initialized]);
 
   const setSelectedTeam = (teamName: string | null): void =>
     setData((prev) => {
       return { ...prev, selectedTeam: teamName };
     });
 
-  const addPassword = (data: {
+  const addPassword = (newData: {
     name: string;
     password: string;
     team: string;
   }): void => {
-    console.log(data);
-    if (!data.name || !data.password || !data.team) return;
+    if (!newData.name || !newData.password || !newData.team) return;
 
     setData((prev) => {
-      prev.passwords.push({ id: createUUID(prev.passwords), ...data });
-      console.log({ ...prev, passwords: [...prev.passwords] });
+      prev.passwords.push({ id: createUUID(prev.passwords), ...newData });
       return { ...prev, passwords: [...prev.passwords] };
     });
   };
@@ -80,6 +90,14 @@ export function ContextProvider(props: Props) {
       prev.passwords[passwordId] = password;
       return { ...prev, passwords: [...prev.passwords] };
     });
+  };
+
+  const deletePassword = (id: number): void => {
+    setData((prev) => {
+      return { ...prev, passwords: prev.passwords.filter((i) => i.id !== id) };
+    });
+
+    if (id === data.selectedPassword) setSelectedPassword(null);
   };
 
   const setSearch = (str: string): void =>
@@ -108,6 +126,7 @@ export function ContextProvider(props: Props) {
     setSearch,
     updatePassword,
     addPassword,
+    deletePassword,
   };
 
   return <Context.Provider value={context}>{props.children}</Context.Provider>;
