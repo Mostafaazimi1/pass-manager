@@ -9,7 +9,6 @@ type Props = {
   children: React.ReactNode[] | React.ReactNode;
   data: {
     teams: ITeam[];
-    passwords: IPassword[];
   };
 };
 
@@ -40,7 +39,7 @@ export function ContextProvider(props: Props) {
     selectedTeam: null,
     selectedPassword: null,
     search: "",
-    teams: [],
+    teams: props.data.teams,
     passwords: [],
     initialized: false,
   });
@@ -49,7 +48,6 @@ export function ContextProvider(props: Props) {
     setData((prev) => {
       return {
         ...prev,
-        teams: getTeams(),
         passwords: getPasswords(),
         initialized: true,
       };

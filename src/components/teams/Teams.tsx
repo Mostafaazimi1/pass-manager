@@ -5,8 +5,8 @@ import { getTeams } from "@/lib/lib";
 
 type Props = {};
 
-function Teams({}: Props) {
-  const teams = getTeams();
+async function Teams({}: Props) {
+  const teams = await getTeams();
 
   return (
     <div className="flex flex-col gap-6 border p-6">

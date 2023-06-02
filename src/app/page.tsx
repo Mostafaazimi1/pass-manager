@@ -3,7 +3,7 @@ import Passwords from "@/components/passwords/Passwords";
 import Detail from "@/components/detail/Detail";
 import Link from "next/link";
 
-export default function Home({}: {}) {
+export default async function Home({}: {}) {
   return (
     <>
       <div className="flex flex-col gap-6 w-96">
