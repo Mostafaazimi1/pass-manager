@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context, IContext } from "@/components/Context";
 import Input from "./Input";
 import { getPassword } from "@/lib/lib";
@@ -12,6 +12,8 @@ export default function Detail({}: Props) {
     useContext(Context) as IContext;
 
   const [show, setShow] = useState<boolean>(false);
+
+  useEffect(() => setShow(false), [data.selectedPassword]);
 
   if (data.selectedPassword === null) return <></>;
 

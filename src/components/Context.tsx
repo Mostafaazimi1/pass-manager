@@ -1,6 +1,6 @@
 "use client";
 
-import { getTeams, createUUID } from "@/lib/lib";
+import { createUUID } from "@/lib/lib";
 import { getPasswords, savePasswords } from "../lib/lib-client";
 import { IPassword, ITeam } from "@/types/types";
 import React, { createContext, useEffect, useMemo, useState } from "react";
